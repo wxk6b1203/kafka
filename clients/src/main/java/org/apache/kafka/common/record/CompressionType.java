@@ -135,6 +135,48 @@ public enum CompressionType {
         public ConfigDef.Validator levelValidator() {
             return between(MIN_LEVEL, MAX_LEVEL);
         }
+    },
+    LZ4_FRAME_RECORD((byte) 5, "lz4.frame.record", 1.0f) {
+        @Override
+        public int defaultLevel() {
+            return LZ4.defaultLevel();
+        }
+
+        @Override
+        public int maxLevel() {
+            return LZ4.maxLevel();
+        }
+
+        @Override
+        public int minLevel() {
+            return LZ4.minLevel();
+        }
+
+        @Override
+        public ConfigDef.Validator levelValidator() {
+            return between(LZ4.minLevel(), LZ4.maxLevel());
+        }
+    },
+    ZSTD_FRAME_RECORD((byte) 6, "zstd.frame.record", 1.0f) {
+        @Override
+        public int defaultLevel() {
+            return ZSTD.defaultLevel();
+        }
+
+        @Override
+        public int maxLevel() {
+            return ZSTD.maxLevel();
+        }
+
+        @Override
+        public int minLevel() {
+            return ZSTD.minLevel();
+        }
+
+        @Override
+        public ConfigDef.Validator levelValidator() {
+            return between(ZSTD.minLevel(), ZSTD.maxLevel());
+        }
     };
 
     // compression type is represented by two bits in the attributes field of the record batch header, so `byte` is
@@ -161,6 +203,10 @@ public enum CompressionType {
                 return LZ4;
             case 4:
                 return ZSTD;
+            case 5:
+                return LZ4_FRAME_RECORD;
+            case 6:
+                return ZSTD_FRAME_RECORD;
             default:
                 throw new IllegalArgumentException("Unknown compression type id: " + id);
         }
@@ -177,6 +223,10 @@ public enum CompressionType {
             return LZ4;
         else if (ZSTD.name.equals(name))
             return ZSTD;
+        else if (LZ4_FRAME_RECORD.name.equals(name))
+            return LZ4_FRAME_RECORD;
+        else if (ZSTD_FRAME_RECORD.name.equals(name))
+            return ZSTD_FRAME_RECORD;
         else
             throw new IllegalArgumentException("Unknown compression name: " + name);
     }

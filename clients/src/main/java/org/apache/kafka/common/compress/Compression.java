@@ -109,4 +109,8 @@ public interface Compression {
     static ZstdCompression.Builder zstd() {
         return new ZstdCompression.Builder();
     }
+
+    static Lz4FrameRecordCompression.Builder lz4FrameRecord() {
+        return new Lz4FrameRecordCompression.Builder();
+    }
 }

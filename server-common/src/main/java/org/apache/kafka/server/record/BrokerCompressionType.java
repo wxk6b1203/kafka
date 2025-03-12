@@ -32,6 +32,8 @@ public enum BrokerCompressionType {
     LZ4("lz4"),
     SNAPPY("snappy"),
     GZIP("gzip"),
+    LZ4_FRAME("lz4.frame.record"),
+    ZSTD_FRAME("zstd.frame.record"),
     PRODUCER("producer");
 
     private static final List<BrokerCompressionType> VALUES = asList(values());

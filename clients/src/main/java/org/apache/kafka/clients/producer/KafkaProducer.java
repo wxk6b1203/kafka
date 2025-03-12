@@ -569,6 +569,12 @@ public class KafkaProducer<K, V> implements Producer<K, V> {
                         .level(config.getInt(ProducerConfig.COMPRESSION_ZSTD_LEVEL_CONFIG))
                         .build();
             }
+            case LZ4_FRAME_RECORD: {
+                return Compression.lz4FrameRecord()
+                        .level(config.getInt(ProducerConfig.COMPRESSION_LZ4_LEVEL_CONFIG))
+                        .build();
+            }
+
             default:
                 return Compression.of(type).build();
         }
