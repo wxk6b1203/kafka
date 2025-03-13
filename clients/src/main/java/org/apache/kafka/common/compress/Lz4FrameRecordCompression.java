@@ -17,6 +17,7 @@
 
 package org.apache.kafka.common.compress;
 
+import org.apache.kafka.common.KafkaException;
 import org.apache.kafka.common.record.CompressionType;
 import org.apache.kafka.common.utils.BufferSupplier;
 import org.apache.kafka.common.utils.ByteBufferOutputStream;
@@ -39,7 +40,11 @@ public class Lz4FrameRecordCompression implements Compression {
 
     @Override
     public OutputStream wrapForOutput(ByteBufferOutputStream bufferStream, byte messageVersion) {
-        return null;
+        try {
+            return new Lz4FrameRecordOutputStream(bufferStream, 6, level);
+        } catch (Throwable e) {
+            throw new KafkaException(e);
+        }
     }
 
     @Override

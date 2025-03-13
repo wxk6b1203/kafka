@@ -24,6 +24,13 @@ public class Lz4FrameRecordOutputStream extends OutputStream {
         this(out, Lz4BlockOutputStream.BLOCKSIZE_64KB, CompressionType.LZ4.defaultLevel());
     }
 
+    /**
+     * Create a new LZ4 output stream which split lz4 frame by single record.
+     * @param out the output stream to write the compressed data to
+     * @param blockSize the block size to use, between 4 and 7
+     * @param level the compression level to use, between 1 and 17
+     * @throws IOException if the output stream could not be created
+     */
     public Lz4FrameRecordOutputStream(OutputStream out, int blockSize, int level) throws IOException {
         LZ4Compressor compressor = level == CompressionType.LZ4.defaultLevel() ? LZ4Factory.fastestInstance().fastCompressor() : LZ4Factory.fastestInstance().highCompressor(level);
         if (blockSize < 4 || blockSize > 7) {
