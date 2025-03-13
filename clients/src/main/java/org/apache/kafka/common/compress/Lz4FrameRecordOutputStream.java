@@ -15,7 +15,6 @@ public class Lz4FrameRecordOutputStream extends OutputStream {
     private LZ4FrameOutputStream out;
     private byte[] buffer;
     private final ByteBuffer sizeBuffer;
-    private byte[] compressedBuffer;
     private boolean finished;
 
     private int remains;
@@ -101,18 +100,21 @@ public class Lz4FrameRecordOutputStream extends OutputStream {
 
             // Parse the varint to get the record size
             sizeBuffer.flip();
-            remains = ByteUtils.readVarint(sizeBuffer);
+            int recordSize = ByteUtils.readVarint(sizeBuffer);
             int varintSize = sizeBuffer.position();
 
-            // Allocate buffer for the complete record (including varint)
-            buffer = new byte[remains + varintSize];
+            // Allocate buffer for the complete record (varint + data)
+            buffer = new byte[recordSize + varintSize];
 
             // Copy the varint bytes to the beginning of our buffer
             System.arraycopy(sizeBuffer.array(), 0, buffer, 0, varintSize);
             sizeBuffer.clear();
 
-            // Copy additional available data
-            int availableDataSize = Math.min(remains - varintSize, len - (pos - off));
+            // Set remains to the number of bytes we still need to read after the varint
+            remains = recordSize;
+
+            // Copy additional available data (if any) from the current chunk
+            int availableDataSize = Math.min(remains, len - (pos - off));
             if (availableDataSize > 0) {
                 System.arraycopy(b, pos, buffer, varintSize, availableDataSize);
                 remains -= availableDataSize;
@@ -120,8 +122,9 @@ public class Lz4FrameRecordOutputStream extends OutputStream {
             }
         } else if (buffer != null) {
             // Continue filling the existing buffer
+            int currentPosition = buffer.length - remains;
             int copySize = Math.min(remains, len);
-            System.arraycopy(b, pos, buffer, buffer.length - remains, copySize);
+            System.arraycopy(b, pos, buffer, currentPosition, copySize);
             remains -= copySize;
             pos += copySize;
         }
@@ -131,7 +134,6 @@ public class Lz4FrameRecordOutputStream extends OutputStream {
             out.write(buffer);
             buffer = null;
         }
-
         return pos;
     }
 

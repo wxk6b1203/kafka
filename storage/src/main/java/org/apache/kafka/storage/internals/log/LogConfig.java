@@ -436,7 +436,7 @@ public class LogConfig extends AbstractConfig {
                 return Optional.of(Compression.gzip()
                         .level(getInt(TopicConfig.COMPRESSION_GZIP_LEVEL_CONFIG))
                         .build());
-            case LZ4:
+            case LZ4, LZ4_FRAME:
                 return Optional.of(Compression.lz4()
                         .level(getInt(TopicConfig.COMPRESSION_LZ4_LEVEL_CONFIG))
                         .build());
