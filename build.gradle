@@ -854,13 +854,13 @@ project(':server') {
 
     implementation libs.slf4jApi
 
-    compileOnly libs.reload4j
+    implementation libs.reload4j
 
     testImplementation project(':clients').sourceSets.test.output
 
     testImplementation libs.mockitoCore
     testImplementation libs.junitJupiter
-    testImplementation libs.slf4jReload4j
+    implementation libs.slf4jReload4j
 
     testRuntimeOnly libs.junitPlatformLanucher
   }
