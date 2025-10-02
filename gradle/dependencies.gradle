@@ -131,7 +131,10 @@ versions += [
   zstd: "1.5.6-10",
   junitPlatform: "1.13.1",
   hdrHistogram: "2.2.2",
-  hash4j: "0.22.0"
+  hash4j: "0.22.0",
+  s3: "2.34.6",
+  urlConnectionClient: "2.34.6",
+  apacheClient: "2.34.6"
 ]
 
 libs += [
@@ -234,4 +237,7 @@ libs += [
   httpclient: "org.apache.httpcomponents:httpclient:$versions.httpclient",
   hdrHistogram: "org.hdrhistogram:HdrHistogram:$versions.hdrHistogram",
   hash4j: "com.dynatrace.hash4j:hash4j:$versions.hash4j",
+  s3: "software.amazon.awssdk:s3:$versions.s3",
+  urlConnectionClient: "software.amazon.awssdk:url-connection-client:$versions.urlConnectionClient",
+  apacheClient: "software.amazon.awssdk:apache-client:$versions.apacheClient"
 ]
